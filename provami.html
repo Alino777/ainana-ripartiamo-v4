@@ -10,13 +10,15 @@
       background-color: black;
       color: white;
       font-family: 'Inter', sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    #formContainer {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      text-align: center;
-      padding: 2rem;
     }
     input {
       margin-top: 1rem;
@@ -39,12 +41,25 @@
       transition: all 0.3s ease;
     }
     button:hover { transform: scale(1.05); }
+    #finalMessage {
+      display: none;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
-  <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
-  <input type="text" id="initials" placeholder="Le tue iniziali" />
-  <button onclick="submitInitials()">Conferma</button>
+  <div id="formContainer">
+    <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
+    <input type="text" id="initials" placeholder="Le tue iniziali" />
+    <button onclick="submitInitials()">Conferma</button>
+  </div>
+
+  <div id="finalMessage">
+    <h2>Grazie, la tua richiesta è stata registrata.<br>Chiudiamo il sipario, ma torniamo presto.<br>– Team di Ainana Italia</h2>
+  </div>
 
   <script>
     function submitInitials() {
@@ -59,10 +74,11 @@
         body: JSON.stringify({ code: "AI.NANA.02", initials }),
         headers: { "Content-Type": "application/json" }
       }).then(() => {
-        alert("Grazie, a presto – Team di Ainana Italia");
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('finalMessage').style.display = 'flex';
         setTimeout(() => {
           window.close();
-        }, 3000);
+        }, 10000);
       }).catch(() => {
         alert("Errore durante l'invio. Riprova più tardi.");
       });
