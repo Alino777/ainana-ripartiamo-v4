@@ -44,17 +44,17 @@
 <body>
   <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
 
-  <!-- Aggiungiamo il form con il metodo POST -->
+  <!-- Modifica il form per inviare i dati alla Web App -->
   <form id="provamiForm" onsubmit="return submitInitials()">
     <input type="text" id="initials" placeholder="Le tue iniziali" required />
     <button type="submit">Conferma</button>
   </form>
 
   <script>
-    // Funzione per validare il form e inviare i dati tramite fetch
+    // Funzione per inviare i dati al server (Google Apps Script Web App)
     function submitInitials() {
       const initials = document.getElementById('initials').value.trim();
-      const message = "Messaggio opzionale";  // Puoi aggiungere un campo per il messaggio, se lo desideri.
+      const message = "Messaggio opzionale";  // Puoi aggiungere un campo per il messaggio, se lo desideri
 
       if (!initials) {
           alert("Inserisci le tue iniziali.");
@@ -64,26 +64,32 @@
       console.log("Iniziali inviate:", initials);
       console.log("Messaggio:", message);
 
-      // Eseguiamo il fetch per inviare i dati solo se le iniziali sono valide
-      fetch("https://script.google.com/macros/s/AKfycbwvHFSbmGgi7LWRYm8US8kffO209Nhwb6vMR35FhKvkhb5V8j9lX8Wb2QSPam_UpRIB/exec", {
-    method: "POST", // Questo deve essere "POST"
-    body: JSON.stringify({
-        code: "AI.NANA.02",
-        initials, // Le iniziali inserite nel modulo
-        message // Se c'è un messaggio opzionale
-    }),
-    headers: { "Content-Type": "application/json" } // Questo dice che stiamo inviando i dati come JSON
-      }).then(response => response.json())
-        .then(data => {
-            console.log("Risposta API:", data);
-            window.location.href = "grazie-finale.html";  // Redirige alla pagina di "grazie"
-        }).catch(error => {
-            console.error("Errore:", error);
-            alert("Errore durante l'invio. Riprova più tardi.");
-        });
+      // Nuovo URL della tua Web App (quello che hai copiato da Google Apps Script)
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbyNAstGZnZ5pvzW-7Q4xgG-prR9vj5JLhqfahu1f0VlDJ6vyTU_YdbBA1YX6lpewKjL/exec";
+
+      // Eseguiamo il fetch per inviare i dati al server
+      fetch(scriptUrl, {
+          method: "POST",  // Metodo POST
+          body: JSON.stringify({
+              code: "AI.NANA.02",  // Codice fisso, puoi cambiarlo se necessario
+              initials: initials,
+              message: message
+          }),
+          headers: { "Content-Type": "application/json" }  // Indica che i dati sono in formato JSON
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log("Risposta API:", data);
+          window.location.href = "grazie-finale.html";  // Redirige alla pagina "grazie"
+      })
+      .catch(error => {
+          console.error("Errore:", error);
+          alert("Errore durante l'invio. Riprova più tardi.");
+      });
 
       return false;  // Previene l'invio del form finché il fetch non è completato
     }
   </script>
 </body>
 </html>
+
