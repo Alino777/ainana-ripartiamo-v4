@@ -44,17 +44,15 @@
 <body>
   <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
 
-  <!-- Modifica il form per inviare i dati alla Web App -->
   <form id="provamiForm" onsubmit="return submitInitials()">
     <input type="text" id="initials" placeholder="Le tue iniziali" required />
     <button type="submit">Conferma</button>
   </form>
 
   <script>
-    // Funzione per inviare i dati al server (Google Apps Script Web App)
     function submitInitials() {
       const initials = document.getElementById('initials').value.trim();
-      const message = "Messaggio opzionale";  // Puoi aggiungere un campo per il messaggio, se lo desideri
+      const message = "Messaggio opzionale";
 
       if (!initials) {
           alert("Inserisci le tue iniziali.");
@@ -64,14 +62,12 @@
       console.log("Iniziali inviate:", initials);
       console.log("Messaggio:", message);
 
-      // Nuovo URL della tua Web App (quello che hai copiato da Google Apps Script)
-      const scriptUrl = "https://script.google.com/macros/s/AKfycbyNAstGZnZ5pvzW-7Q4xgG-prR9vj5JLhqfahu1f0VlDJ6vyTU_YdbBA1YX6lpewKjL/exec";
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbyOotiAskjgs_jJP_Ogn5DmUvuqcG4Jw4SSlJuRg5bv0sEsC2FyAOptrEyGRx9Us24sMg/exec";  // URL della Web App
 
-      // Eseguiamo il fetch per inviare i dati al server
       fetch(scriptUrl, {
           method: "POST",  // Metodo POST
           body: JSON.stringify({
-              code: "AI.NANA.02",  // Codice fisso, puoi cambiarlo se necessario
+              code: "AI.NANA.02",  // Codice fisso
               initials: initials,
               message: message
           }),
