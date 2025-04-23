@@ -50,49 +50,43 @@
   </form>
 
   <script>
-    function submitInitials(e) {
-    e.preventDefault();
-    const initials = document.getElementById('initials').value.trim();
-    const message = "Messaggio opzionale";
+    function submitInitials() {
+      const initials = document.getElementById('initials').value.trim();
+      const message = "Messaggio opzionale";
 
-    if (!initials) {
-        alert("Inserisci le tue iniziali.");
-        return false;
+      if (!initials) {
+          alert("Inserisci le tue iniziali.");
+          return false;  // Previene l'invio del form
+      }
+
+      console.log("Iniziali inviate:", initials);
+      console.log("Messaggio:", message);
+
+      // URL della tua Web App
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbyOotiAskjgs_jJP_Ogn5DmUvuqcG4Jw4SSlJuRg5bv0sEsC2FyAOptrEyGRx9Us24sMg/exec";
+
+      // Eseguiamo il fetch per inviare i dati al server
+      fetch(scriptUrl, {
+          method: "POST",  // Metodo POST
+          body: JSON.stringify({
+              code: "AI.NANA.02",  // Codice fisso
+              initials: initials,
+              message: message
+          }),
+          headers: { "Content-Type": "application/json" }  // Indica che i dati sono in formato JSON
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log("Risposta API:", data);
+          window.location.href = "grazie-finale.html";  // Redirige alla pagina "grazie"
+      })
+      .catch(error => {
+          console.error("Errore:", error);
+          alert("Errore durante l'invio. Riprova più tardi.");
+      });
+
+      return false;  // Previene l'invio del form finché il fetch non è completato
     }
-
-    if (initials.length > 3) {
-        alert("Inserisci massimo 3 caratteri.");
-        return false;
-    }
-
-    console.log("Iniziali inviate:", initials);
-    console.log("Messaggio:", message);
-
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbyOotiAskjgs_jJP_Ogn5DmUvuqcG4Jw4SSlJuRg5bv0sEsC2FyAOptrEyGRx9Us24sMg/exec";
-
-    fetch(scriptUrl, {
-        method: "POST",
-        body: JSON.stringify({
-            code: "AI.NANA.02",
-            initials: initials,
-            message: message
-        }),
-        headers: { "Content-Type": "application/json" }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Errore nella risposta del server.");
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Risposta API:", data);
-        window.location.href = "grazie-finale.html";
-    })
-    .catch(error => {
-        console.error("Errore:", error);
-        alert("Errore durante l'invio: " + error.message);
-    });
-
-    return false;
-}
+  </script>
+</body>
+</html>
