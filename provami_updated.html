@@ -44,6 +44,7 @@
 <body>
   <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
 
+  <!-- Form per inviare i dati -->
   <form id="provamiForm" onsubmit="return submitInitials()">
     <input type="text" id="initials" placeholder="Le tue iniziali" required />
     <button type="submit">Conferma</button>
@@ -52,7 +53,7 @@
   <script>
     function submitInitials() {
       const initials = document.getElementById('initials').value.trim();
-      const message = "Messaggio opzionale";
+      const message = "Messaggio opzionale";  // Aggiungi un messaggio opzionale
 
       if (!initials) {
           alert("Inserisci le tue iniziali.");
@@ -62,10 +63,9 @@
       console.log("Iniziali inviate:", initials);
       console.log("Messaggio:", message);
 
-      // URL della tua Web App
-      const scriptUrl = "https://script.google.com/macros/s/AKfycbyOotiAskjgs_jJP_Ogn5DmUvuqcG4Jw4SSlJuRg5bv0sEsC2FyAOptrEyGRx9Us24sMg/exec";
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbzUSHbFepDjYQ2Ul7w3v3iL_8gof4lSfoZ1wdRZnxCT6P2ukLsePoeMUfD8pO1AU1dIPQ/exec";  // URL della Web App
 
-      // Eseguiamo il fetch per inviare i dati al server
+      // Eseguiamo il fetch per inviare i dati al server con metodo POST
       fetch(scriptUrl, {
           method: "POST",  // Metodo POST
           body: JSON.stringify({
