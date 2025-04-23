@@ -52,17 +52,14 @@
   <script>
     function submitInitials() {
       const initials = document.getElementById('initials').value.trim();
-      const message = "Messaggio opzionale";  // Aggiungi un messaggio opzionale
+      const message = "Messaggio opzionale";  // Messaggio opzionale
 
       if (!initials) {
           alert("Inserisci le tue iniziali.");
           return false;  // Previene l'invio del form
       }
 
-      console.log("Iniziali inviate:", initials);
-      console.log("Messaggio:", message);
-
-      const scriptUrl = "https://script.google.com/macros/s/AKfycbyVrWcbhSOOgRL9VaffZUad3l37BcV-d6TCvlgmusgiUFwHzn8lV3VM9yXQiOwdeK_xCQ/exec";  // URL della Web App
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbyBSKBDU8gd61_5re5jyoDqYGIMDHCqTiIKmzICjdGfV4M8evlBGoeZNSXdsVFKMzujMA/exec";  // Inserisci l'URL della Web App
 
       // Eseguiamo il fetch per inviare i dati al server con metodo POST
       fetch(scriptUrl, {
