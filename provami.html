@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prova Ainana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    input {
+      margin-top: 1rem;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      width: 200px;
+      text-align: center;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      background-color: #00c896;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+  <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
+
+  <!-- Aggiungiamo il form con il metodo POST -->
+  <form id="provamiForm" action="grazie-finale.html" method="POST" onsubmit="return validateForm()">
+    <input type="text" id="initials" placeholder="Le tue iniziali" required />
+    <button type="submit">Conferma</button>
+  </form>
+
+  <script>
+    // Funzione per validare il form
+    function validateForm() {
+      const initials = document.getElementById('initials').value.trim();
+      
+      // Controlliamo che l'input non sia vuoto
+      if (!initials) {
+        alert("Inserisci le tue iniziali.");
+        return false;  // Non invia il form
+      }
+
+      // Eseguiamo il fetch per inviare i dati solo se le iniziali sono valide
+      fetch("https://script.google.com/macros/s/AKfycbyOotiAskjgs_jJP_Ogn5DmUvuqcG4Jw4SSlJuRg5bv0sEsC2FyAOptrEyGRx9Us24sMg/exec", {
+        method: "POST",
+        body: JSON.stringify({ code: "AI.NANA.02", initials }),
+        headers: { "Content-Type": "application/json" }
+      }).then(() => {
+        return true; // Il form sarà inviato se il fetch va a buon fine
+      }).catch(() => {
+        alert("Errore durante l'invio. Riprova più tardi.");
+        return false; // Non invia il form in caso di errore
+      });
+      
+      return false; // Previene l'invio del form finché il fetch non è completato
+    }
+  </script>
+</body>
+</html>
