@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accesso - Ainana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body { background-color: black; color: white; font-family: 'Inter', sans-serif; text-align: center; padding: 2rem; }
+    input, button { padding: 0.6rem; font-size: 1rem; border-radius: 8px; border: none; margin-top: 1rem; }
+    img.pineapple { width: 100px; opacity: 0.9; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <h2>C’è chi esercita una professione, e chi lascia un segno. Il suo contributo alla nutrizione in Italia non è passato inosservato: oggi è tra i pochissimi scelti per scoprire un progetto destinato a cambiare le regole del gioco.</h2>
+  <h1>INSERISCI IL TUO CODICE</h1>
+  <form action="video.html" method="get" onsubmit="return validateCode()">
+    <input type="text" id="code" placeholder="Codice di accesso" required />
+    <br />
+    <button type="submit">Accedi</button>
+  </form>
+  <img src="ananas.gif" class="pineapple" alt="ananas" />
+  <script>
+    function validateCode() {
+      const code = document.getElementById('code').value.trim();
+      if (code === "AI.NANA.02") {
+        return true;
+      } else {
+        alert("Codice errato. Riprova.");
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>

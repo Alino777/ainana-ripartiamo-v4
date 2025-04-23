@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prova Ainana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+    }
+    input {
+      margin-top: 1rem;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      width: 200px;
+      text-align: center;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      background-color: #00c896;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover { transform: scale(1.05); }
+  </style>
+</head>
+<body>
+  <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
+  <input type="text" id="initials" placeholder="Le tue iniziali" />
+  <button onclick="submitInitials()">Conferma</button>
+
+  <script>
+    function submitInitials() {
+      const initials = document.getElementById('initials').value.trim();
+      if (!initials) {
+        alert("Inserisci le tue iniziali.");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbx9fagMSz0sFCrHbPX8wyYSXqJvlHgdRZ-tcNn1o0XvCVRXSWVGNMizwKnceqwNzLn1vQ/exec", {
+        method: "POST",
+        body: JSON.stringify({ code: "AI.NANA.02", initials }),
+        headers: { "Content-Type": "application/json" }
+      }).then(() => {
+        alert("Grazie, a presto – Team di Ainana Italia");
+        setTimeout(() => {
+          window.close();
+        }, 3000);
+      }).catch(() => {
+        alert("Errore durante l'invio. Riprova più tardi.");
+      });
+    }
+  </script>
+</body>
+</html>
