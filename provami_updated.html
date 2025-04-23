@@ -62,17 +62,21 @@
         return false;  // Non invia il form
       }
 
+      console.log("Iniziali:", initials);  // Aggiungi questa riga per verificare il valore
+
       // Eseguiamo il fetch per inviare i dati solo se le iniziali sono valide
       fetch("https://script.google.com/macros/s/AKfycbyOotiAskjgs_jJP_Ogn5DmUvuqcG4Jw4SSlJuRg5bv0sEsC2FyAOptrEyGRx9Us24sMg/exec", {
         method: "POST",
         body: JSON.stringify({ code: "AI.NANA.02", initials }),
         headers: { "Content-Type": "application/json" }
-      }).then(() => {
-        return true; // Il form sarà inviato se il fetch va a buon fine
-      }).catch(() => {
-        alert("Errore durante l'invio. Riprova più tardi.");
-        return false; // Non invia il form in caso di errore
-      });
+      }).then(response => response.json())
+        .then(data => {
+            console.log("Risposta API:", data);  // Aggiungi per vedere la risposta
+            window.location.href = "grazie-finale.html";
+        }).catch(error => {
+            console.error("Errore:", error);  // Aggiungi per vedere errori
+            alert("Errore durante l'invio. Riprova più tardi.");
+        });
       
       return false; // Previene l'invio del form finché il fetch non è completato
     }
