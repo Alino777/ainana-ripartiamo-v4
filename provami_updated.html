@@ -65,14 +65,14 @@
       console.log("Messaggio:", message);
 
       // Eseguiamo il fetch per inviare i dati solo se le iniziali sono valide
-      fetch("https://script.google.com/macros/s/AKfycbzYdI6JC-MRoNA8JpXkNGRNKta8sG9hGbC8C02WIY9n0W_DA_un_z-805L8W38o3l9F-Q/exec", {
-          method: "POST",
-          body: JSON.stringify({
-              code: "AI.NANA.02",
-              initials,
-              message
-          }),
-          headers: { "Content-Type": "application/json" }
+      fetch("https://script.google.com/macros/s/AKfycbwvHFSbmGgi7LWRYm8US8kffO209Nhwb6vMR35FhKvkhb5V8j9lX8Wb2QSPam_UpRIB/exec", {
+    method: "POST", // Questo deve essere "POST"
+    body: JSON.stringify({
+        code: "AI.NANA.02",
+        initials, // Le iniziali inserite nel modulo
+        message // Se c'è un messaggio opzionale
+    }),
+    headers: { "Content-Type": "application/json" } // Questo dice che stiamo inviando i dati come JSON
       }).then(response => response.json())
         .then(data => {
             console.log("Risposta API:", data);
