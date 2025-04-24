@@ -44,43 +44,59 @@
 <body>
   <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
 
-  <form id="provamiForm" method="GET" action="https://script.google.com/macros/s/AKfycbzdOd8pEQji5EeSEbm9H4gtRq_hVcH-n45h2JX-dWyWg83sxR0AHKvTXgc-E_howahhig/exec">
+  <form id="provamiForm" method="POST" action="https://script.google.com/macros/s/AKfycbzdOd8pEQji5EeSEbm9H4gtRq_hVcH-n45h2JX-dWyWg83sxR0AHKvTXgc-E_howahhig/exec">
     <input type="text" id="initials" name="initials" placeholder="Le tue iniziali" required />
     <input type="hidden" name="code" value="AI.NANA.02">
     <input type="hidden" name="message" value="Messaggio opzionale">
     <button type="submit">Conferma</button>
   </form>
 
-</body>
-</html>
-
   <script>
-    function submitInitials() {
+    // Funzione per inviare i dati tramite POST
+    function submitInitials(event) {
+      event.preventDefault();  // Impedisce l'invio del modulo di default
+
       const initials = document.getElementById('initials').value.trim();
       const message = "Messaggio opzionale";  // Messaggio opzionale
 
       if (!initials) {
           alert("Inserisci le tue iniziali.");
-
+          return;
       }
 
-      const scriptUrl = "https://script.google.com/macros/s/AKfycbyg329FlLTWqT5vefxDIDzEQKHrj5czQJZ04b73rh3RKBDTb_Rg1Sx7t2cWg7rgUXNcyA/exec";  // Inserisci l'URL della Web App
+      const scriptUrl = "https://script.google.com/macros/s/AKfycbzdOd8pEQji5EeSEbm9H4gtRq_hVcH-n45h2JX-dWyWg83sxR0AHKvTXgc-E_howahhig/exec";  // URL della Web App
 
-      // Eseguiamo il fetch per inviare i dati al server con metodo POST
+      // Prepara il corpo della richiesta POST
+      const body = JSON.stringify({
+          initials: initials,
+          message: message,
+          date: new Date().toISOString()  // Aggiungi la data
+      });
+
+      // Eseguiamo il fetch per inviare i dati al server
       fetch(scriptUrl, {
           method: "POST",  // Metodo POST
-          body: JSON.stringify({
-              initials: initials,
-              message: message
-          }),
+          body: body,
           headers: { "Content-Type": "application/json" }  // Indica che i dati sono in formato JSON
       })
       .then(response => response.json())
       .then(data => {
           console.log("Risposta API:", data);
-          window.location.href = "grazie-finale.html";  // Redirige alla pagina "grazie"
+          if (data.result === "success") {
+              window.location.href = "grazie-finale.html";  // Redirige alla pagina "grazie"
+          } else {
+              alert("Si è verificato un errore. Riprova.");
+          }
       })
+      .catch(error => {
+          console.error("Errore:", error);
+          alert("Errore durante l'invio dei dati.");
+      });
     }
+
+    // Aggiunge l'evento di submit al form
+    document.getElementById('provamiForm').addEventListener('submit', submitInitials);
   </script>
+
 </body>
 </html>
