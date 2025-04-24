@@ -76,12 +76,6 @@
           console.log("Risposta API:", data);
           window.location.href = "grazie-finale.html";  // Redirige alla pagina "grazie"
       })
-      .catch(error => {
-          console.error("Errore:", error);
-          alert("Errore durante l'invio. Riprova più tardi.");
-      });
-
-      return false;  // Previene l'invio del form finché il fetch non è completato
     }
   </script>
 </body>
