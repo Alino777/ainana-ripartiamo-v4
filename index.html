@@ -21,6 +21,107 @@
   </form>
   <img src="ananas.gif" class="pineapple" alt="ananas" />
 
+  <!-- Firebase App (core SDK compat mode) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
+      authDomain: "ainanaaccessi.firebaseapp.com",
+      databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "ainanaaccessi",
+      storageBucket: "ainanaaccessi.firebasestorage.app",
+      messagingSenderId: "39413654454",
+      appId: "1:39413654454:web:58fe34ba829bcea63c5717"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const validCodesList = ["AI.NANA.02", "AI.NANA.03", "AI.NANA.04", "AI.NANA.05", "AI.NANA.06", "AI.NANA.07", "AI.NANA.08", "AI.NANA.09",
+      "AI.02.NANA", "AI.03.NANA", "AI.04.NANA", "AI.05.NANA", "AI.06.NANA", "AI.07.NANA", "AI.08.NANA", "AI.09.NANA",
+      "NANA.02.AI", "NANA.03.AI", "NANA.04.AI", "NANA.05.AI", "NANA.06.AI", "NANA.07.AI", "NANA.08.AI", "NANA.09.AI",
+      "02.AI.NANA", "03.AI.NANA", "04.AI.NANA", "05.AI.NANA", "06.AI.NANA", "07.AI.NANA", "08.AI.NANA", "09.AI.NANA",
+      "02.NANA.AI", "03.NANA.AI", "04.NANA.AI", "05.NANA.AI", "06.NANA.AI", "07.NANA.AI", "08.NANA.AI", "09.NANA.AI",
+      "AI.NANA.2", "AI.NANA.3", "AI.NANA.4", "AI.NANA.5", "AI.NANA.6", "AI.NANA.7", "AI.NANA.8", "AI.NANA.9",
+      "AI.2.NANA", "AI.3.NANA", "AI.4.NANA", "AI.5.NANA", "AI.6.NANA", "AI.7.NANA", "AI.8.NANA", "AI.9.NANA",
+      "NANA.2.AI", "NANA.3.AI", "NANA.4.AI", "NANA.5.AI", "NANA.6.AI", "NANA.7.AI", "NANA.8.AI", "NANA.9.AI",
+      "2.AI.NANA", "3.AI.NANA", "4.AI.NANA", "5.AI.NANA", "6.AI.NANA", "7.AI.NANA", "8.AI.NANA", "9.AI.NANA",
+      "2.NANA.AI", "3.NANA.AI", "4.NANA.AI", "5.NANA.AI", "6.NANA.AI", "7.NANA.AI", "8.NANA.AI", "9.NANA.AI",
+      "AINANA.02", "AINANA.03", "AINANA.04", "AINANA.05", "AINANA.06", "AINANA.07", "AINANA.08", "AINANA.09",
+      "AINANA.2", "AINANA.3", "AINANA.4", "AINANA.5", "AINANA.6", "AINANA.7", "AINANA.8", "AINANA.9",
+      "AINANA2", "AINANA3", "AINANA4", "AINANA5", "AINANA6", "AINANA7", "AINANA8", "AINANA9",
+      "2AINANA", "3AINANA", "4AINANA", "5AINANA", "6AINANA", "7AINANA", "8AINANA", "9AINANA",
+      "2AI.NANA", "3AI.NANA", "4AI.NANA", "5AI.NANA", "6AI.NANA", "7AI.NANA", "8AI.NANA", "9AI.NANA",
+      "A.I.NANA02", "A.I.NANA03", "A.I.NANA04", "A.I.NANA05", "A.I.NANA06", "A.I.NANA07", "A.I.NANA08", "A.I.NANA09",
+      "A.I.NANA2", "A.I.NANA3", "A.I.NANA4", "A.I.NANA5", "A.I.NANA6", "A.I.NANA7", "A.I.NANA8", "A.I.NANA9",
+      "AI.1NANA.02", "AI.1NANA.03", "AI.1NANA.04", "AI.1NANA.05", "AI.1NANA.06", "AI.1NANA.07", "AI.1NANA.08", "AI.1NANA.09",
+      "AI.1NANA.2", "AI.1NANA.3", "AI.1NANA.4", "AI.1NANA.5", "AI.1NANA.6", "AI.1NANA.7", "AI.1NANA.8", "AI.1NANA.9",
+      "AI1NANA.02", "AI1NANA.03", "AI1NANA.04", "AI1NANA.05", "AI1NANA.06", "AI1NANA.07", "AI1NANA.08", "AI1NANA.09",
+      "AI1NANA.2", "AI1NANA.3", "AI1NANA.4", "AI1NANA.5", "AI1NANA.6", "AI1NANA.7", "AI1NANA.8", "AI1NANA.9",
+      "1AINANA.02", "1AINANA.03", "1AINANA.04", "1AINANA.05", "1AINANA.06", "1AINANA.07", "1AINANA.08", "1AINANA.09",
+      "1AINANA.2", "1AINANA.3", "1AINANA.4", "1AINANA.5", "1AINANA.6", "1AINANA.7", "1AINANA.8", "1AINANA.9",
+      "02AINANA", "03AINANA", "04AINANA", "05AINANA", "06AINANA", "07AINANA", "08AINANA", "09AINANA",
+      "02.AINANA", "03.AINANA", "04.AINANA", "05.AINANA", "06.AINANA", "07.AINANA", "08.AINANA", "09.AINANA",
+      "02AI.NANA", "03AI.NANA", "04AI.NANA", "05AI.NANA", "06AI.NANA", "07AI.NANA", "08AI.NANA", "09AI.NANA"]; // Inserisci qui i tuoi codici validi
+
+    function validateCode() {
+      const code = document.getElementById('code').value.trim();
+      if (validCodesList.includes(code)) {
+        console.log("Codice valido: " + code);
+        firebase.database().ref('accessi/' + code + '/' + Date.now()).set({
+          codice: code,
+          nome: 'Utente Ainana',
+          dataOra: new Date().toISOString()
+        }).then(() => {
+          console.log('Salvato su Firebase');
+          window.location.href = 'video.html';
+        }).catch(error => {
+          console.error('Errore di salvataggio:', error);
+          alert('Errore nella registrazione accesso.');
+        });
+        return false;
+      } else {
+        alert("Codice errato. Riprova.");
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accesso - Ainana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body { background-color: black; color: white; font-family: 'Inter', sans-serif; text-align: center; padding: 2rem; }
+    input, button { padding: 0.6rem; font-size: 1rem; border-radius: 8px; border: none; margin-top: 1rem; }
+    img.pineapple { width: 100px; opacity: 0.9; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+  <h2>C’è chi esercita una professione, e chi lascia un segno. Il suo contributo alla nutrizione in Italia non è passato inosservato: oggi è tra i pochissimi scelti per scoprire un progetto destinato a cambiare le regole del gioco.</h2>
+  <h1>INSERISCI IL TUO CODICE</h1>
+  <form onsubmit="return validateCode()">
+    <input type="text" id="code" placeholder="Codice di accesso" required />
+    <br />
+    <button type="submit">Accedi</button>
+  </form>
+  <img src="ananas.gif" class="pineapple" alt="ananas" />
+
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -65,27 +166,30 @@
       "02.AINANA", "03.AINANA", "04.AINANA", "05.AINANA", "06.AINANA", "07.AINANA", "08.AINANA", "09.AINANA",
       "02AI.NANA", "03AI.NANA", "04AI.NANA", "05AI.NANA", "06AI.NANA", "07AI.NANA", "08AI.NANA", "09AI.NANA"];
 
-    function validateCode() {
-      const code = document.getElementById('code').value.trim();
-      if (validCodesList.includes(code)) {
-        console.log("Codice valido: " + code);
-        firebase.database().ref('accessi/' + code + '/' + Date.now()).set({
-          codice: code,
-          nome: 'Utente Ainana',
-          dataOra: new Date().toISOString()
-        }).then(() => {
-          console.log('Salvato su Firebase');
-          window.location.href = 'video.html';
-        }).catch(error => {
-          console.error('Errore di salvataggio:', error);
-          alert('Errore nella registrazione accesso.');
-        });
-        return false;
-      } else {
-        alert("Codice errato. Riprova.");
-        return false;
-      }
+      <script>
+  function validateCode() {
+    const code = document.getElementById('code').value.trim();
+    if (validCodesList.includes(code)) {
+      console.log("✅ Codice valido: " + code);
+      firebase.database().ref('accessi/' + code + '/' + Date.now()).set({
+        codice: code,
+        nome: 'Utente Ainana',
+        dataOra: new Date().toISOString()
+      }).then(() => {
+        console.log('✅ Salvato su Firebase');
+        window.location.href = 'video.html';
+      }).catch(error => {
+        console.error('❌ Errore di salvataggio:', error);
+        alert('Errore nella registrazione accesso.');
+      });
+      return false;
+    } else {
+      console.log("⚠️ Codice NON valido inserito");
+      alert("Codice errato. Riprova.");
+      return false;
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
