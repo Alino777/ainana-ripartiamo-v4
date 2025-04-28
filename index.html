@@ -21,23 +21,34 @@
   </form>
   <img src="ananas.gif" class="pineapple" alt="ananas" />
 
-  <script>
-    const validCodesList = [...]; // (codici mantenuti uguali)
+  <!-- Firebase App (core SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
-    const webAppUrl = 'https://script.google.com/macros/s/AKfycbw8Yt7BG3EYDRZrPtcNQgzmVpXCv779sK_bRCOzfhiSaFlzVodrxJekooVITmVTJde4/exec';
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
+      authDomain: "ainanaaccessi.firebaseapp.com",
+      databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "ainanaaccessi",
+      storageBucket: "ainanaaccessi.firebasestorage.app",
+      messagingSenderId: "39413654454",
+      appId: "1:39413654454:web:58fe34ba829bcea63c5717"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const validCodesList = [...]; // (codici mantenuti uguali)
 
     function validateCode() {
       const code = document.getElementById('code').value.trim();
       if (validCodesList.includes(code)) {
-        const formData = new FormData();
-        formData.append('Codice', code);
-        formData.append('Nome', 'Utente Ainana');
-        formData.append('Date', new Date().toISOString());
-
-        fetch(webAppUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: formData
+        const accessoRef = database.ref('accessi/' + code + '/' + Date.now());
+        accessoRef.set({
+          codice: code,
+          nome: 'Utente Ainana',
+          dataOra: new Date().toISOString()
         }).then(() => {
           window.location.href = 'video.html';
         }).catch(error => {
