@@ -30,5 +30,59 @@
     <a href="blu.html" class="blue-pill">Torno allo status quo</a>
     <a href="grazie.html" class="red-pill">Voglio saperne di più</a>
   </div>
+
+  <!-- Qui carichiamo Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <!-- Tutto il nostro JavaScript -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
+      authDomain: "ainanaaccessi.firebaseapp.com",
+      databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "ainanaaccessi",
+      storageBucket: "ainanaaccessi.firebasestorage.app",
+      messagingSenderId: "39413654454",
+      appId: "1:39413654454:web:58fe34ba829bcea63c5717"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const codiceUtente = sessionStorage.getItem('codiceUtente');
+    const safeCode = codiceUtente ? codiceUtente.replaceAll('.', '_') : 'sconosciuto';
+    const currentPage = window.location.pathname;
+
+    function tracciaEventoFirebase(azione) {
+      if (!codiceUtente) {
+        console.error("Codice utente non trovato!");
+        return;
+      }
+      const timestamp = Date.now();
+      firebase.database().ref('accessi/' + safeCode + '/eventi/' + timestamp).set({
+        azione: azione,
+        pagina: currentPage,
+        dataOra: new Date().toISOString()
+      }).then(() => {
+        console.log(`✅ Evento tracciato: ${azione}`);
+      }).catch((error) => {
+        console.error('❌ Errore salvataggio evento:', error);
+      });
+    }
+
+    // Tracciamento click sui link
+    document.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        tracciaEventoFirebase("Click su link: " + link.textContent.trim());
+      });
+    });
+
+    // Tracciamento play video (iframe YouTube NON supporta play direttamente, se vuoi tracciarlo serve API YouTube diversa)
+    // window.addEventListener('beforeunload' per tracciamento chiusura pagina
+    window.addEventListener('beforeunload', () => {
+      tracciaEventoFirebase("Chiusura Pagina");
+    });
+  </script>
 </body>
 </html>
