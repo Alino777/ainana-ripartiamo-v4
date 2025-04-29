@@ -125,18 +125,27 @@
       });
     }
 
-    // Traccia caricamento pagina
-    tracciaEventoFirebase("Caricamento Pagina");
+  // Traccia caricamento pagina
+tracciaEventoFirebase("Caricamento Pagina");
 
-    // Traccia chiusura pagina
-    window.addEventListener('beforeunload', () => {
-      tracciaEventoFirebase("Chiusura Pagina");
-    });
+// Traccia chiusura pagina
+window.addEventListener('beforeunload', () => {
+  tracciaEventoFirebase("Chiusura Pagina");
+});
 
-    // Traccia click su bottone "Lascia il segno"
-    document.querySelector('.btn').addEventListener('click', () => {
-      tracciaEventoFirebase("Click su Lascia il segno");
-    });
+// Traccia click su bottone "Lascia il segno"
+document.querySelector('.btn').addEventListener('click', () => {
+  tracciaEventoFirebase("Click su Lascia il segno");
+});
+
+// Traccia selezione/deselezione checkbox "earlyAccess"
+document.getElementById('earlyAccess').addEventListener('change', (event) => {
+  if (event.target.checked) {
+    tracciaEventoFirebase("Selezionato early access");
+  } else {
+    tracciaEventoFirebase("Deselezionato early access");
+  }
+});
   </script>
 
 </body>
