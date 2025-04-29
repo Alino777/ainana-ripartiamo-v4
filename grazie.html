@@ -109,21 +109,33 @@
     const currentPage = window.location.pathname;
 
     function tracciaEventoFirebase(azione) {
-      if (!codiceUtente) {
-        console.error("Codice utente non trovato!");
-        return;
-      }
-      const timestamp = Date.now();
-      firebase.database().ref('accessi/' + safeCode + '/eventi/' + timestamp).set({
-        azione: azione,
-        pagina: currentPage,
-        dataOra: new Date().toISOString()
-      }).then(() => {
-        console.log(`✅ Evento tracciato: ${azione}`);
-      }).catch((error) => {
-        console.error('❌ Errore salvataggio evento:', error);
-      });
-    }
+  const codiceUtente = sessionStorage.getItem('codiceUtente');
+  const safeCode = codiceUtente ? codiceUtente.replaceAll('.', '_') : 'sconosciuto';
+  const currentPage = window.location.pathname;
+
+  if (!codiceUtente) {
+    console.error("Codice utente non trovato!");
+    return;
+  }
+
+  fetch('https://script.google.com/macros/s/AKfycbxLaAbUQLB5aCBjbDRCgP7TWOjSkjTTuvpP2nGaRH5ujnaDe8eJV7yv7Qa0zIAmCBEW/exec', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      codice: safeCode,
+      azione: azione,
+      pagina: currentPage,
+      dataOra: new Date().toISOString()
+    })
+  })
+  .then(response => response.json())
+  .then(data => console.log('✅ Registrato su Google Sheets:', data))
+  .catch((error) => {
+    console.error('❌ Errore durante la registrazione:', error);
+  });
+}
 
   // Traccia caricamento pagina
 tracciaEventoFirebase("Caricamento Pagina");

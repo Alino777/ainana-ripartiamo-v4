@@ -69,33 +69,45 @@
 ];
 
 
-    document.getElementById('access-form').addEventListener('submit', validateCode);
+document.getElementById('access-form').addEventListener('submit', validateCode);
 
-    function validateCode(event) {
-      event.preventDefault();
+function validateCode(event) {
+  event.preventDefault();
 
-      const code = document.getElementById('code').value.trim();
-const safeCode = code.replaceAll('.', '_');
+  const code = document.getElementById('code').value.trim();
+  const safeCode = code.replaceAll('.', '_');
 
-if (validCodesList.includes(code)) {
-  console.log("✅ Codice valido: " + code);
-  firebase.database().ref('accessi/' + safeCode + '/' + Date.now()).set({
-    codice: code,
-    nome: 'Utente Ainana',
-    dataOra: new Date().toISOString()
-  }).then(() => {
-    console.log('✅ Salvato su Firebase');
-    sessionStorage.setItem('codiceUtente', code); // salva codice vero
-    window.location.href = 'video.html';
-  }).catch(error => {
-    console.error('❌ Errore di salvataggio:', error);
-    alert('Errore nella registrazione accesso.');
-  });
-} else {
-  console.log("⚠️ Codice NON valido inserito");
-  alert("Codice errato. Riprova.");
+  if (validCodesList.includes(code)) {
+    console.log("✅ Codice valido: " + code);
+    sessionStorage.setItem('codiceUtente', code); // salva il codice corretto
+
+    fetch('https://script.google.com/macros/s/AKfycbxLaAbUQLB5aCBjbDRCgP7TWOjSkjTTuvpP2nGaRH5ujnaDe8eJV7yv7Qa0zIAmCBEW/exec', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        codice: safeCode,
+        azione: 'Accesso Riuscito',
+        pagina: window.location.pathname,
+        dataOra: new Date().toISOString()
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('✅ Registrato su Google Sheets:', data);
+      window.location.href = 'video.html'; // Solo dopo aver registrato va su video.html
+    })
+    .catch(error => {
+      console.error('❌ Errore registrazione su Google Sheets:', error);
+      alert('Errore nella registrazione accesso.');
+    });
+
+  } else {
+    console.log("⚠️ Codice NON valido inserito");
+    alert("Codice errato. Riprova.");
+  }
 }
-} 
   </script>
 </body>
 </html>
