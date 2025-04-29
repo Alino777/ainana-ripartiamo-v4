@@ -30,7 +30,7 @@
   <h1>Grazie, la tua richiesta è stata registrata.
     Chiudiamo il sipario, ma torniamo a sorprenderti presto.
     – Team di Ainana Italia</h1>
-  <p class="bottom-note">Questo messaggio si autodistruggerà in 20 secondi</p>
+  <p class="bottom-note">Questo messaggio si autodistruggerà in 10 secondi</p>
 
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
@@ -75,10 +75,10 @@
       tracciaEventoFirebase("Chiusura Pagina");
     });
 
-    // Dopo 20 secondi redirect a pagina ananas
+    // Dopo 10 secondi redirect a pagina ananas
     setTimeout(() => {
       window.location.href = "ananas.html";
-    }, 20000); // 20 secondi
+    }, 10000); // 10 secondi
   </script>
 
 </body>
