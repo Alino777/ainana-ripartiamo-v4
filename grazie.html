@@ -1,61 +1,143 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pagina Grazie</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scopri Ainana - Ainana</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { background-color: black; color: white; font-family: 'Inter', sans-serif; text-align: center; padding: 2rem; }
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+      padding: 2rem;
+      animation: fadeIn 2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+      max-width: 600px;
+    }
+
+    .checkbox-container {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      transform: scale(1.4);
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    .checkbox-container label {
+      font-style: italic;
+    }
+
+    .btn {
+      padding: 0.8rem 1.6rem;
+      font-size: 1rem;
+      background-color: #00c896;
+      border: none;
+      border-radius: 999px;
+      color: white;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
-  <h1>Grazie per aver scelto di proseguire.</h1>
-  
-  
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
-    authDomain: "ainanaaccessi.firebaseapp.com",
-    databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "ainanaaccessi",
-    storageBucket: "ainanaaccessi.firebasestorage.app",
-    messagingSenderId: "39413654454",
-    appId: "1:39413654454:web:58fe34ba829bcea63c5717"
-  };
+  <h2>Chi sceglie di esplorare, spesso cambia il futuro.</h2>
+  <p>
+    Presto ti invieremo nuove informazioni su Ainana.<br>
+    Alcuni riceveranno qualcosa in più: un accesso riservato in anteprima.<br>
+    Se vuoi essere tra loro, indicacelo qui sotto.
+  </p>
+  <div class="checkbox-container">
+    <label>
+      <input type="checkbox" id="earlyAccess" name="earlyAccess" />
+      Voglio essere tra i primi a scoprire Ainana.
+    </label>
+  </div>
+  <a href="grazie-finale.html" class="btn">Lascia il segno</a>
 
-  firebase.initializeApp(firebaseConfig);
-  const database = firebase.database();
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
+      authDomain: "ainanaaccessi.firebaseapp.com",
+      databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "ainanaaccessi",
+      storageBucket: "ainanaaccessi.firebasestorage.app",
+      messagingSenderId: "39413654454",
+      appId: "1:39413654454:web:58fe34ba829bcea63c5717"
+    };
 
-  const codiceUtente = sessionStorage.getItem('codiceUtente');
-  const safeCode = codiceUtente ? codiceUtente.replaceAll('.', '_') : 'sconosciuto';
-  const currentPage = window.location.pathname;
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-  function tracciaEventoFirebase(azione) {
-    if (!codiceUtente) {
-      console.error("Codice utente non trovato!");
-      return;
+    const codiceUtente = sessionStorage.getItem('codiceUtente');
+    const safeCode = codiceUtente ? codiceUtente.replaceAll('.', '_') : 'sconosciuto';
+    const currentPage = window.location.pathname;
+
+    function tracciaEventoFirebase(azione) {
+      if (!codiceUtente) {
+        console.error("Codice utente non trovato!");
+        return;
+      }
+      const timestamp = Date.now();
+      firebase.database().ref('accessi/' + safeCode + '/eventi/' + timestamp).set({
+        azione: azione,
+        pagina: currentPage,
+        dataOra: new Date().toISOString()
+      }).then(() => {
+        console.log(`✅ Evento tracciato: ${azione}`);
+      }).catch((error) => {
+        console.error('❌ Errore salvataggio evento:', error);
+      });
     }
-    const timestamp = Date.now();
-    firebase.database().ref('accessi/' + safeCode + '/eventi/' + timestamp).set({
-      azione: azione,
-      pagina: currentPage,
-      dataOra: new Date().toISOString()
-    }).then(() => {
-      console.log(`✅ Evento tracciato: ${azione}`);
-    }).catch((error) => {
-      console.error('❌ Errore salvataggio evento:', error);
+
+    // Traccia caricamento pagina
+    tracciaEventoFirebase("Caricamento Pagina");
+
+    // Traccia chiusura pagina
+    window.addEventListener('beforeunload', () => {
+      tracciaEventoFirebase("Chiusura Pagina");
     });
-  }
 
-  tracciaEventoFirebase("Caricamento Pagina");
-
-  window.addEventListener('beforeunload', () => {
-    tracciaEventoFirebase("Chiusura Pagina");
-  });
-</script>
+    // Traccia click su bottone "Lascia il segno"
+    document.querySelector('.btn').addEventListener('click', () => {
+      tracciaEventoFirebase("Click su Lascia il segno");
+    });
+  </script>
 
 </body>
 </html>
