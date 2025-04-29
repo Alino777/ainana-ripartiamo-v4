@@ -1,40 +1,61 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grazie finale</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagina Finale</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 2rem;
-      text-align: center;
-    }
-    .bottom-note {
-      position: absolute;
-      bottom: 2rem;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
+    body { background-color: black; color: white; font-family: 'Inter', sans-serif; text-align: center; padding: 2rem; }
   </style>
-  <script>
-    setTimeout(() => {
-      window.close();
-    }, 10000);
-  </script>
 </head>
 <body>
-  <h2>Grazie, la tua richiesta è stata registrata.<br>
-  Chiudiamo il sipario, ma torniamo presto.<br>
-  – Team di Ainana Italia</h2>
-  <div class="bottom-note">Questo messaggio si autodistruggerà tra 10 secondi.</div>
+  <h1>Grazie per aver completato il percorso.</h1>
+  
+  
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
+    authDomain: "ainanaaccessi.firebaseapp.com",
+    databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "ainanaaccessi",
+    storageBucket: "ainanaaccessi.firebasestorage.app",
+    messagingSenderId: "39413654454",
+    appId: "1:39413654454:web:58fe34ba829bcea63c5717"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  const codiceUtente = sessionStorage.getItem('codiceUtente');
+  const safeCode = codiceUtente ? codiceUtente.replaceAll('.', '_') : 'sconosciuto';
+  const currentPage = window.location.pathname;
+
+  function tracciaEventoFirebase(azione) {
+    if (!codiceUtente) {
+      console.error("Codice utente non trovato!");
+      return;
+    }
+    const timestamp = Date.now();
+    firebase.database().ref('accessi/' + safeCode + '/eventi/' + timestamp).set({
+      azione: azione,
+      pagina: currentPage,
+      dataOra: new Date().toISOString()
+    }).then(() => {
+      console.log(`✅ Evento tracciato: ${azione}`);
+    }).catch((error) => {
+      console.error('❌ Errore salvataggio evento:', error);
+    });
+  }
+
+  tracciaEventoFirebase("Caricamento Pagina");
+
+  window.addEventListener('beforeunload', () => {
+    tracciaEventoFirebase("Chiusura Pagina");
+  });
+</script>
+
 </body>
 </html>

@@ -1,102 +1,61 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prova Ainana</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modulo</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      padding: 2rem;
-    }
-    input {
-      margin-top: 1rem;
-      padding: 0.6rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: none;
-      width: 200px;
-      text-align: center;
-    }
-    button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      background-color: #00c896;
-      color: white;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    button:hover { transform: scale(1.05); }
+    body { background-color: black; color: white; font-family: 'Inter', sans-serif; text-align: center; padding: 2rem; }
   </style>
 </head>
 <body>
-  <p>Ainana non è ancora pubblico.<br>Ma chi è arrivato fin qui, può provarlo prima.<br>Le tue iniziali bastano. Noi faremo il resto.</p>
+  <h1>Modulo di raccolta informazioni.</h1>
+  
+  
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyC69R3ojbm_QvhC-lzj2qtI1ce_eidxFFY",
+    authDomain: "ainanaaccessi.firebaseapp.com",
+    databaseURL: "https://ainanaaccessi-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "ainanaaccessi",
+    storageBucket: "ainanaaccessi.firebasestorage.app",
+    messagingSenderId: "39413654454",
+    appId: "1:39413654454:web:58fe34ba829bcea63c5717"
+  };
 
-  <form id="provamiForm" method="POST" action="https://script.google.com/macros/s/AKfycbzdOd8pEQji5EeSEbm9H4gtRq_hVcH-n45h2JX-dWyWg83sxR0AHKvTXgc-E_howahhig/exec">
-    <input type="text" id="initials" name="initials" placeholder="Le tue iniziali" required />
-    <input type="hidden" name="code" value="AI.NANA.02">
-    <input type="hidden" name="message" value="Messaggio opzionale">
-    <button type="submit">Conferma</button>
-  </form>
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
 
-  <script>
-    // Funzione per inviare i dati tramite POST
-    function submitInitials(event) {
-      event.preventDefault();  // Impedisce l'invio del modulo di default
+  const codiceUtente = sessionStorage.getItem('codiceUtente');
+  const safeCode = codiceUtente ? codiceUtente.replaceAll('.', '_') : 'sconosciuto';
+  const currentPage = window.location.pathname;
 
-      const initials = document.getElementById('initials').value.trim();
-      const message = "Messaggio opzionale";  // Messaggio opzionale
-
-      if (!initials) {
-          alert("Inserisci le tue iniziali.");
-          return;
-      }
-
-      const scriptUrl = "https://script.google.com/macros/s/AKfycbzdOd8pEQji5EeSEbm9H4gtRq_hVcH-n45h2JX-dWyWg83sxR0AHKvTXgc-E_howahhig/exec";  // URL della Web App
-
-      // Prepara il corpo della richiesta POST
-      const body = JSON.stringify({
-          initials: initials,
-          message: message,
-          date: new Date().toISOString()  // Aggiungi la data
-      });
-
-      // Eseguiamo il fetch per inviare i dati al server
-      fetch(scriptUrl, {
-          method: "POST",  // Metodo POST
-          body: body,
-          headers: { "Content-Type": "application/json" }  // Indica che i dati sono in formato JSON
-      })
-      .then(response => response.json())
-      .then(data => {
-          console.log("Risposta API:", data);
-          if (data.result === "success") {
-              window.location.href = "grazie-finale.html";  // Redirige alla pagina "grazie"
-          } else {
-              alert("Si è verificato un errore. Riprova.");
-          }
-      })
-      .catch(error => {
-          console.error("Errore:", error);
-          alert("Errore durante l'invio dei dati.");
-      });
+  function tracciaEventoFirebase(azione) {
+    if (!codiceUtente) {
+      console.error("Codice utente non trovato!");
+      return;
     }
+    const timestamp = Date.now();
+    firebase.database().ref('accessi/' + safeCode + '/eventi/' + timestamp).set({
+      azione: azione,
+      pagina: currentPage,
+      dataOra: new Date().toISOString()
+    }).then(() => {
+      console.log(`✅ Evento tracciato: ${azione}`);
+    }).catch((error) => {
+      console.error('❌ Errore salvataggio evento:', error);
+    });
+  }
 
-    // Aggiunge l'evento di submit al form
-    document.getElementById('provamiForm').addEventListener('submit', submitInitials);
-  </script>
+  tracciaEventoFirebase("Caricamento Pagina");
+
+  window.addEventListener('beforeunload', () => {
+    tracciaEventoFirebase("Chiusura Pagina");
+  });
+</script>
 
 </body>
 </html>
